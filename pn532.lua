@@ -1,7 +1,7 @@
 -- PN532 module, om mifare kaart-IDs te lezen
-pn532 = {}
+local pn532 = {}
 
-function printhex(txt, ...)
+local function printhex(txt, ...)
     uart.write(0, txt)
     for _,c in ipairs(arg) do
         uart.write(0, string.format(" %02x", c))
@@ -9,7 +9,7 @@ function printhex(txt, ...)
     print()
 end
 
-function sendframe(cmd, ...)
+local function sendframe(cmd, ...)
     -- Build PN532 frame
     frame = {0x00, 0xff, #arg+2, 254-#arg, 0xd4, cmd}
     chk = -0xd4 - cmd
@@ -54,7 +54,7 @@ function sendframe(cmd, ...)
     return false
 end
 
-function readframe(cmd,count,timeout)
+local function readframe(cmd,count,timeout)
     while timeout > 0 do
         i2c.start(0)
         if i2c.address(0, 0x24, i2c.RECEIVER) == false then
@@ -109,7 +109,7 @@ function pn532.scancard(timeout)
 end
 
 function pn532.init()
-    i2c.setup(0, 1, 2, i2c.SLOW)
+    i2c.setup(0, 3, 2, i2c.SLOW)
     if not pn532.samconfig(1, 20, 1) then return false end
     return true
 end
