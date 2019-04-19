@@ -69,17 +69,11 @@ local function readframe(cmd,count,timeout)
                 printhex("Result:", result:byte(1, count+8))
                 return nil
             end
-            if result:byte(5)-2 ~= count then
-                print(string.format("Unexpected length %d<>%d",count,result:byte(5)-2))
-                printhex("Result:", result:byte(1, count+8))
-                return nil
-            end
-            return {result:byte(9,count+8)}
+            return {result:byte(9,#result)}
         end
         timeout = timeout - 1
         tmr.delay(1)
     end
-    -- printhex("Timeout, Result:", result:byte(1, count+8))
     return nil
 end
 
@@ -91,9 +85,23 @@ function pn532.getfirmware()
     return true
 end
 
-function pn532.samconfig(...)
+function pn532.configsam(...)
     if not sendframe(0x14, unpack(arg)) then return false end
     res = readframe(0x14, 0, 10)
+    if res == nil then return false end
+    return true
+end
+
+function pn532.configretry(maxretry)
+    if not sendframe(0x32, 0x05, 0x02, 0x02, maxretry) then return false end
+    res = readframe(0x32, 0, 10)
+    if res == nil then return false end
+    return true
+end
+
+function pn532.releasecard(idx)
+    if not sendframe(0x52, idx) then return false end
+    res = readframe(0x52, 1, 10)
     if res == nil then return false end
     return true
 end
@@ -105,12 +113,15 @@ function pn532.scancard(timeout)
     -- print(string.format("Reading (timeout %d)", timeout))
     res = readframe(0x4a, 10, timeout)
     if res == nil then return nil end
+    if res[1] ~= 1 then return nil end
+    pn532.releasecard(res[2])
     return res[7]*0x1000000+res[8]*0x10000+res[9]*0x100+res[10]
 end
 
 function pn532.init()
     i2c.setup(0, 3, 2, i2c.SLOW)
-    if not pn532.samconfig(1, 20, 1) then return false end
+    if not pn532.configsam(1, 20, 1) then return false end
+    if not pn532.configretry(10) then return false end
     return true
 end
 
