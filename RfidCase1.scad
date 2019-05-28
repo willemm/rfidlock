@@ -36,21 +36,29 @@ ledsize=3;
     *translate([-diamondsize*0.64,0,2]) linear_extrude(height=1, scale=0.97) mirror([1,0,0]) triangle(diamondsize*0.6235,2);
 }
 
-translate([0,0,20]) mirror([0,0,0]) difference() {
+translate([0,0,0]) mirror([0,0,1]) difference() {
     union() {
         hexcover(10, hexagonsize-15, hexagonsize, 2, 2);
 
-        translate([0,0,3.5]) rotate([0,0,360/48]) cylinder(2.5, 53.6/2, 53.6/2, $fn=24);
-        translate([0,0,6]) rotate([0,0,360/48]) cylinder(2, 68/2, 68/2, $fn=24);
+        translate([0,0,3.3]) rotate([0,0,360/48]) cylinder(2.5, 53.6/2, 53.6/2, $fn=24);
+        translate([0,0,5.8]) rotate([0,0,360/48]) cylinder(2.5, 68/2, 68/2, $fn=24);
+        translate([-2,-33,3.3]) rotate([0,90,0])
+            linear_extrude(height=4) polygon([
+                [-5,-2],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[0.5,-2]
+            ]);
+        translate([2,33,3.3]) rotate([0,90,180])
+            linear_extrude(height=4) polygon([
+                [-5,-2],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[0.5,-2]
+            ]);
     }
     for (an = [360/lednum:360/lednum:360]) {
         rotate([0,0,an]) {
-            translate([ledpos, 0, 6.9]) ledhole();
-            translate([ledpos, 0, 6]) cube([5.5,5.5,2],true);
+            translate([ledpos, 0, 6.7]) ledhole();
+            translate([ledpos, 0, 5.8]) cube([5.5,5.5,2],true);
         }
     }
-    translate([0,0,3.5]) rotate([0,0,360/48]) cylinder(4, 53.6/2-2, 53.6/2-2, $fn=24);
-    translate([0,0,6]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
+    translate([0,0,3.2]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
+    translate([0,0,5.8]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
 }
 
 function linepoints(x1, y1, x2, y2, z, n) = [
