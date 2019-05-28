@@ -9,10 +9,18 @@ enduser_setup.start(
 
 nfc = require "pn532"
 
-red = string.char(255,0,0)
-green = string.char(0,255,0)
-blue = string.char(0,0,255)
-black =string.char(0,0,0) 
+red = string.char(10,0,0,0,0,0)
+green = string.char(0,10,0,0,0,0)
+blue = string.char(0,0,10,0,0,0)
+black = string.char(0,0,0,0,0,0) 
+-- red = red..red..red
+-- red = red..red..red..red
+-- green = green..green..green
+-- green = green..green..green..green
+-- blue = blue..blue..blue
+-- blue = blue..blue..blue..blue
+-- black = black..black..black
+-- black = black..black..black..black
 ws2812.init()
 ws2812.write(black)
 
