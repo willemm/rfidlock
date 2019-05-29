@@ -11,12 +11,12 @@ sidecovers=false;
 
 diamondcase();
 diamondbottom();
-translate([0,0,18]) covers();
 translate([0,0,20]) hexfront();
+translate([0,0,18]) covers();
 
-// mirror([0,0,1]) diamondcase();
-// diamondbottom();
-// mirror([0,0,1]) hexfront();
+*mirror([0,0,1]) diamondcase();
+*diamondbottom();
+*mirror([0,0,1]) hexfront();
 
 module diamondcase() {
     union() {
@@ -37,6 +37,7 @@ module diamondcase() {
                 translate([-diamondsize*0.64,0,14]) linear_extrude(height=5) mirror([1,0,0]) triangle(diamondsize/2,[1,1,1]);
             } else {
                 translate([0,0,-1]) linear_extrude(height=19) diamond(diamondsize-2, 1);
+                translate([0,0,-1]) linear_extrude(height=3) diamond(diamondsize-1, 1);
             }
             if (dimples) {
                 translate([-diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
@@ -58,13 +59,19 @@ module diamondcase() {
 }
 
 module diamondbottom() {
-    union() {
-        linear_extrude(height=1.5) diamond(diamondsize-2-0.2, 1);
-        translate([0,0,1.5]) linear_extrude(height=0.5,scale=0.998) diamond(diamondsize-2-0.2, 1);
-        rotate([0,0, 30]) bottomtab(-20);
-        rotate([0,0,-30]) bottomtab( 20);
-        rotate([0,0,150]) bottomtab( 20);
-        rotate([0,0,210]) bottomtab(-20);
+    difference() {
+        union() {
+            linear_extrude(height=1.8) diamond(diamondsize-1-0.2, 1);
+            translate([0,0,1.8]) linear_extrude(height=0.2,scale=0.998) diamond(diamondsize-1-0.2, 1);
+            rotate([0,0, 30]) bottomtab(-20);
+            rotate([0,0,-30]) bottomtab( 20);
+            rotate([0,0,150]) bottomtab( 20);
+            rotate([0,0,210]) bottomtab(-20);
+        }
+        translate([-diamondsize/2.5,0,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
+        translate([ diamondsize/2.5,0,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
+        translate([0,-diamondsize/s3/2.5,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
+        translate([0, diamondsize/s3/2.5,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
     }
 }
 
