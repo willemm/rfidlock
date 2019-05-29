@@ -6,7 +6,9 @@ lednum=24;
 ledpos=59.8/2;
 ledsize=3;
 
-*union() {
+dimples=false;
+
+union() {
     difference() {
         linear_extrude(height=20) diamond(diamondsize, 2);
         translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-2, 1);
@@ -15,40 +17,60 @@ ledsize=3;
         translate([-diamondsize*0.64,0,18]) linear_extrude(height=3) mirror([1,0,0]) triangle(diamondsize*0.63,[0,0,0]);
         translate([ diamondsize*0.64,0,14]) linear_extrude(height=5) triangle(diamondsize/2,[1,1,1]);
         translate([-diamondsize*0.64,0,14]) linear_extrude(height=5) mirror([1,0,0]) triangle(diamondsize/2,[1,1,1]);
-        translate([-diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
-        translate([-diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
-        translate([ diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
-        translate([ diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
+        if (dimples) {
+            translate([-diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
+            translate([-diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
+            translate([ diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
+            translate([ diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
+        }
     }
 }
 *translate([0,0,18]) {
     difference() {
         translate([diamondsize*0.64,0,0]) linear_extrude(height=2) triangle(diamondsize*0.6235,[0,2,0]);
-        translate([diamondsize*0.746,-diamondsize*0.233,-4]) sphere(10,$fn=64);
-        translate([diamondsize*0.746, diamondsize*0.233,-4]) sphere(10,$fn=64);
+        if (dimples) {
+            translate([diamondsize*0.746,-diamondsize*0.233,-4]) sphere(10,$fn=64);
+            translate([diamondsize*0.746, diamondsize*0.233,-4]) sphere(10,$fn=64);
+        }
     }
     *translate([diamondsize*0.64,0,2]) linear_extrude(height=1, scale=0.97) triangle(diamondsize*0.6235,2);
     difference() {
         translate([-diamondsize*0.64,0,0]) linear_extrude(height=2) mirror([1,0,0]) triangle(diamondsize*0.6235,[0,2,0]);
-        translate([-diamondsize*0.746,-diamondsize*0.233,-4]) sphere(10,$fn=64);
-        translate([-diamondsize*0.746, diamondsize*0.233,-4]) sphere(10,$fn=64);
+        if (dimples) {
+            translate([-diamondsize*0.746,-diamondsize*0.233,-4]) sphere(10,$fn=64);
+            translate([-diamondsize*0.746, diamondsize*0.233,-4]) sphere(10,$fn=64);
+        }
     }
     *translate([-diamondsize*0.64,0,2]) linear_extrude(height=1, scale=0.97) mirror([1,0,0]) triangle(diamondsize*0.6235,2);
 }
 
-translate([0,0,0]) mirror([0,0,1]) difference() {
+translate([0,0,20]) mirror([0,0,0]) difference() {
     union() {
-        hexcover(10, hexagonsize-15, hexagonsize, 2, 2);
+        hexdia = hexagonsize*2/s3;
+        hexcover(10, hexdia-15, hexdia, 1.5, 2);
 
         translate([0,0,3.3]) rotate([0,0,360/48]) cylinder(2.5, 53.6/2, 53.6/2, $fn=24);
         translate([0,0,5.8]) rotate([0,0,360/48]) cylinder(2.5, 68/2, 68/2, $fn=24);
-        translate([-2,-33,3.3]) rotate([0,90,0])
-            linear_extrude(height=4) polygon([
-                [-5,-2],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[0.5,-2]
+        translate([-5,-33,3.3]) rotate([0,90,0])
+            linear_extrude(height=10) polygon([
+                [-5,-3],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
             ]);
-        translate([2,33,3.3]) rotate([0,90,180])
-            linear_extrude(height=4) polygon([
-                [-5,-2],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[0.5,-2]
+        translate([5,33,3.3]) rotate([0,90,180])
+            linear_extrude(height=10) polygon([
+                [-5,-3],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
+            ]);
+
+        rotate([0,0,30]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
+            linear_extrude(height=20) polygon([
+                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
+            ]);
+        rotate([0,0,150]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
+            linear_extrude(height=20) polygon([
+                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
+            ]);
+        rotate([0,0,270]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
+            linear_extrude(height=20) polygon([
+                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
             ]);
     }
     for (an = [360/lednum:360/lednum:360]) {
@@ -57,8 +79,8 @@ translate([0,0,0]) mirror([0,0,1]) difference() {
             translate([ledpos, 0, 5.8]) cube([5.5,5.5,2],true);
         }
     }
-    translate([0,0,3.2]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
-    translate([0,0,5.8]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
+    translate([0,0,2.7]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
+    translate([0,0,5.3]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
 }
 
 function linepoints(x1, y1, x2, y2, z, n) = [
