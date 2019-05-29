@@ -7,24 +7,43 @@ ledpos=59.8/2;
 ledsize=3;
 
 dimples=false;
+sidecovers=false;
 
 union() {
     difference() {
         linear_extrude(height=20) diamond(diamondsize, 2);
-        translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-2, 1);
         translate([0,0,15]) linear_extrude(height=6) hexagon(hexagonsize-10);
-        translate([ diamondsize*0.64,0,18]) linear_extrude(height=3) triangle(diamondsize*0.63,[0,0,0]);
-        translate([-diamondsize*0.64,0,18]) linear_extrude(height=3) mirror([1,0,0]) triangle(diamondsize*0.63,[0,0,0]);
-        translate([ diamondsize*0.64,0,14]) linear_extrude(height=5) triangle(diamondsize/2,[1,1,1]);
-        translate([-diamondsize*0.64,0,14]) linear_extrude(height=5) mirror([1,0,0]) triangle(diamondsize/2,[1,1,1]);
+        if (sidecovers) {
+            translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-2, 1);
+            ds1 = (diamondsize-2)/2;
+            ds2 = (hexagonsize-3)/2;
+            translate([0,0,15]) linear_extrude(height=3) polygon([
+                [-ds2,-ds1/s3-(ds1-ds2)/s3],[0,-ds1*2/s3],[ ds2,-ds1/s3-(ds1-ds2)/s3],
+                [ ds2, ds1/s3+(ds1-ds2)/s3],[0, ds1*2/s3],[-ds2, ds1/s3+(ds1-ds2)/s3]
+            ]);
+            translate([ diamondsize*0.64,0,18]) linear_extrude(height=3) triangle(diamondsize*0.63,[0,0,0]);
+            translate([-diamondsize*0.64,0,18]) linear_extrude(height=3) mirror([1,0,0]) triangle(diamondsize*0.63,[0,0,0]);
+            translate([ diamondsize*0.64,0,14]) linear_extrude(height=5) triangle(diamondsize/2,[1,1,1]);
+            translate([-diamondsize*0.64,0,14]) linear_extrude(height=5) mirror([1,0,0]) triangle(diamondsize/2,[1,1,1]);
+        } else {
+            translate([0,0,-1]) linear_extrude(height=19) diamond(diamondsize-2, 1);
+        }
         if (dimples) {
             translate([-diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
             translate([-diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
             translate([ diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
             translate([ diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
         }
+        rotate([0,0, 30]) casetabcut();
+        rotate([0,0,150]) casetabcut();
+        rotate([0,0,270]) casetabcut();
+
+        for (a=[0:60:300]) rotate([0,0,a]) casepinhole();
     }
 }
+
+
+
 *translate([0,0,18]) {
     difference() {
         translate([diamondsize*0.64,0,0]) linear_extrude(height=2) triangle(diamondsize*0.6235,[0,2,0]);
@@ -60,18 +79,11 @@ translate([0,0,20]) mirror([0,0,0]) difference() {
                 [-5,-3],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
             ]);
 
-        rotate([0,0,30]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
-            linear_extrude(height=20) polygon([
-                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
-            ]);
-        rotate([0,0,150]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
-            linear_extrude(height=20) polygon([
-                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
-            ]);
-        rotate([0,0,270]) translate([-10,(hexagonsize-10)/2,-4]) rotate([0,90,0])
-            linear_extrude(height=20) polygon([
-                [-14,-3],[-13,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
-            ]);
+        rotate([0,0, 30]) casetab();
+        rotate([0,0,150]) casetab();
+        rotate([0,0,270]) casetab();
+
+        for (a=[0:60:300]) rotate([0,0,a]) casepin();
     }
     for (an = [360/lednum:360/lednum:360]) {
         rotate([0,0,an]) {
@@ -81,6 +93,62 @@ translate([0,0,20]) mirror([0,0,0]) difference() {
     }
     translate([0,0,2.7]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
     translate([0,0,5.3]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
+}
+
+module casepin() {
+    sides=24;
+    h=4;
+    slant=1;
+    r=1;
+    taper=0.7;
+    translate([0, hexagonsize/s3-2.5,-2]) polyhedron(
+        points = concat(
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r*taper,cos(a)*r*taper,0] ],
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,0.5] ],
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,h-slant*cos(a)*r] ]
+        ),
+        faces = concat(
+            [[for(i=[0:sides-1]) i]],
+            nquads(sides,0),
+            nquads(sides,sides),
+            [[for(i=[sides*3-1:-1:sides*2]) i]]
+        )
+    );
+}
+
+module casepinhole() {
+    sides=24;
+    h=3;
+    r=1.1;
+    translate([0, hexagonsize/s3-2.5,17.5]) polyhedron(
+        points = concat(
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,0] ],
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,h] ]
+        ),
+        faces = concat(
+            [[for(i=[0:sides-1]) i]],
+            nquads(sides,0),
+            [[for(i=[sides*2-1:-1:sides]) i]]
+        )
+    );
+    
+    // cylinder(4,1,1, $fn=sides);
+}
+
+module casetabcut() {
+    translate([-10.5,(hexagonsize-10)/2+0.1,18])
+        rotate([0,90,0])
+            linear_extrude(height=21) polygon([
+                [-2.5,-1],[-2.5,1],[-1,0],[-0.5,0],[0.5,1],[0.5,-1]
+            ]);
+}
+
+module casetab() {
+    translate([-10,(hexagonsize-10)/2,-2])
+        rotate([0,90,0])
+            linear_extrude(height=20) polygon([
+                [-11,-1.5],[-9,0],[-0.5,0],[0,0.5],[1.5,-0.5],[0.5,-1.5]
+            ]);
 }
 
 function linepoints(x1, y1, x2, y2, z, n) = [
