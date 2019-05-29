@@ -14,6 +14,9 @@ diamondbottom();
 translate([0,0,18]) covers();
 translate([0,0,20]) hexfront();
 
+// mirror([0,0,1]) diamondcase();
+// diamondbottom();
+// mirror([0,0,1]) hexfront();
 
 module diamondcase() {
     union() {
