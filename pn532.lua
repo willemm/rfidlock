@@ -23,6 +23,7 @@ local function sendframe(cmd, ...)
     table.insert(frame, 0)
     -- Send frame
     i2c.start(0)
+    -- print("Send address")
     if i2c.address(0, 0x24, i2c.TRANSMITTER) == false then
         i2c.stop(0)
         print(string.format("Failed to send address for %02x",cmd))
@@ -111,11 +112,11 @@ function pn532.scancard(timeout)
     -- print(string.format("Scanning card"))
     if not sendframe(0x4a, 0x01, 0x00) then return nil end
     -- print(string.format("Reading (timeout %d)", timeout))
-    res = readframe(0x4a, 10, timeout)
-    if res == nil then return nil end
-    if res[1] ~= 1 then return nil end
-    pn532.releasecard(res[2])
-    return res[7]*0x1000000+res[8]*0x10000+res[9]*0x100+res[10]
+    scanres = readframe(0x4a, 10, timeout)
+    if scanres == nil then return nil end
+    if scanres[1] ~= 1 then return nil end
+    -- pn532.releasecard(scanres[2])
+    return scanres[7]*0x1000000+scanres[8]*0x10000+scanres[9]*0x100+scanres[10]
 end
 
 function pn532.init()
