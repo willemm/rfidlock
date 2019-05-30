@@ -24,9 +24,10 @@ module diamondcase() {
             linear_extrude(height=20) diamond(diamondsize, 2);
             translate([0,0,15]) linear_extrude(height=6) hexagon(hexagonsize-10);
             if (sidecovers) {
-                translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-2, 1);
-                ds1 = (diamondsize-2)/2;
-                ds2 = (hexagonsize-3)/2;
+                translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-4, 1);
+                translate([0,0,-1]) linear_extrude(height=3) diamond(diamondsize-2, 1);
+                ds1 = (diamondsize-4)/2;
+                ds2 = (hexagonsize-2)/2;
                 translate([0,0,15]) linear_extrude(height=3) polygon([
                     [-ds2,-ds1/s3-(ds1-ds2)/s3],[0,-ds1*2/s3],[ ds2,-ds1/s3-(ds1-ds2)/s3],
                     [ ds2, ds1/s3+(ds1-ds2)/s3],[0, ds1*2/s3],[-ds2, ds1/s3+(ds1-ds2)/s3]
@@ -36,8 +37,8 @@ module diamondcase() {
                 translate([ diamondsize*0.64,0,14]) linear_extrude(height=5) triangle(diamondsize/2,[1,1,1]);
                 translate([-diamondsize*0.64,0,14]) linear_extrude(height=5) mirror([1,0,0]) triangle(diamondsize/2,[1,1,1]);
             } else {
-                translate([0,0,-1]) linear_extrude(height=19) diamond(diamondsize-2, 1);
-                translate([0,0,-1]) linear_extrude(height=3) diamond(diamondsize-1, 1);
+                translate([0,0,-1]) linear_extrude(height=19) diamond(diamondsize-4, 1);
+                translate([0,0,-1]) linear_extrude(height=3) diamond(diamondsize-2, 1);
             }
             if (dimples) {
                 translate([-diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
@@ -61,8 +62,8 @@ module diamondcase() {
 module diamondbottom() {
     difference() {
         union() {
-            linear_extrude(height=1.8) diamond(diamondsize-1-0.2, 1);
-            translate([0,0,1.8]) linear_extrude(height=0.2,scale=0.998) diamond(diamondsize-1-0.2, 1);
+            linear_extrude(height=1.8) diamond(diamondsize-2-0.2, 1);
+            translate([0,0,1.8]) linear_extrude(height=0.1,scale=0.998) diamond(diamondsize-2-0.2, 1);
             rotate([0,0, 30]) bottomtab(-20);
             rotate([0,0,-30]) bottomtab( 20);
             rotate([0,0,150]) bottomtab( 20);
@@ -185,18 +186,18 @@ module casetab() {
 }
 
 module bottomtab(off=0) {
-    translate([-10+off,(diamondsize-2)/2-0.6,0])
+    translate([-10+off,(diamondsize-4)/2-0.9,0])
         rotate([0,90,0])
             linear_extrude(height=20) polygon([
-                [0,-1.5],[0,0],[-9.5,0],[-10,0.5],[-11.5,-0.5],[-10.5,-1.5]
+                [0,-1.5],[0,0],[-9.2,0],[-10,0.8],[-12,-0.5],[-10.5,-1.5]
             ]);
 }
 
 module bottomtablip(off=0) {
-    translate([-10+off,(diamondsize-2)/2-0.5,0])
+    #translate([-10+off,(diamondsize-4)/2-0.8,0])
         rotate([0,90,0])
             linear_extrude(height=20) polygon([
-                [-8,1],[-9.5,0],[-10.5,1]
+                [-7,1.3],[-9.2,0],[-10.5,1.3]
             ]);
 }
 
