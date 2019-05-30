@@ -46,9 +46,9 @@ module diamondcase() {
                 translate([ diamondsize*0.75,-diamondsize*0.24,18]) sphere(10,$fn=64);
                 translate([ diamondsize*0.75, diamondsize*0.24,18]) sphere(10,$fn=64);
             }
-            rotate([0,0, 30]) casetabcut();
-            rotate([0,0,150]) casetabcut();
-            rotate([0,0,270]) casetabcut();
+            for (a=[30:60:330]) {
+                rotate([0,0,a]) casetabcut();
+            }
 
             for (a=[0:60:300]) rotate([0,0,a]) casepinhole();
         }
@@ -56,7 +56,21 @@ module diamondcase() {
         rotate([0,0,-30]) bottomtablip( 20);
         rotate([0,0,150]) bottomtablip( 20);
         rotate([0,0,210]) bottomtablip(-20);
+        
+        translate([-67,12.7,18]) mcutab();
+        translate([-67,-12.7,18]) rotate([0,0,180]) mcutab();
+        *translate([-67,0,18-2.4]) cube([34.6,25.4,4.8], true);
+        translate([-67+17.3+2/2, 9,18-7/2]) cube([2,4,7],true);
+        translate([-67+17.3+2/2,-9,18-7/2]) cube([2,4,7],true);
+        translate([-67-17.3-2/2, 9,18-7/2]) cube([2,4,7],true);
+        translate([-67-17.3-2/2,-9,18-7/2]) cube([2,4,7],true);
     }
+}
+
+module mcutab() {
+    translate([-5,0,0]) rotate([0,90,0]) linear_extrude(height=10) polygon([
+        [0,0],[4.8,0],[5.4,-0.5],[7,0.5],[5.4,1.5],[0,1.5]
+    ]);
 }
 
 module diamondbottom() {
@@ -126,6 +140,8 @@ module hexfront() {
         }
         translate([0,0,2.7]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
         translate([0,0,5.3]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
+        translate([ 53.6/2-2,0,3.7]) cube([5,10,4.2],true);
+        translate([-53.6/2+2,0,3.7]) cube([5,10,4.2],true);
     }
 }
 
@@ -137,9 +153,9 @@ module casepin() {
     taper=0.7;
     translate([0, hexagonsize/s3-2.5,-2]) polyhedron(
         points = concat(
-            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r*taper,cos(a)*r*taper,0] ],
-            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,0.5] ],
-            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,h-slant*cos(a)*r] ]
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,h-slant*cos(a)*r] ],
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r,cos(a)*r,-0.5] ],
+            [for (a=[0:360/sides:360-360/sides]) [sin(a)*r*taper,cos(a)*r*taper,-1] ]
         ),
         faces = concat(
             [[for(i=[0:sides-1]) i]],
@@ -194,7 +210,7 @@ module bottomtab(off=0) {
 }
 
 module bottomtablip(off=0) {
-    #translate([-10+off,(diamondsize-4)/2-0.8,0])
+    translate([-10+off,(diamondsize-4)/2-0.8,0])
         rotate([0,90,0])
             linear_extrude(height=20) polygon([
                 [-7,1.3],[-9.2,0],[-10.5,1.3]
