@@ -56,19 +56,21 @@ module diamondcase() {
         rotate([0,0,-30]) bottomtablip( 20);
         rotate([0,0,150]) bottomtablip( 20);
         rotate([0,0,210]) bottomtablip(-20);
-        
-        translate([-67,12.7,18]) mcutab();
-        translate([-67,-12.7,18]) rotate([0,0,180]) mcutab();
-        *translate([-67,0,18-2.4]) cube([34.6,25.4,4.8], true);
-        translate([-67+17.3+2/2, 9,18-7/2]) cube([2,4,7],true);
-        translate([-67+17.3+2/2,-9,18-7/2]) cube([2,4,7],true);
-        translate([-67-17.3-2/2, 9,18-7/2]) cube([2,4,7],true);
-        translate([-67-17.3-2/2,-9,18-7/2]) cube([2,4,7],true);
+  
+        *#translate([-66,0,18-2.4]) cube([34.6,25.4,4.8], true);
+        translate([-66-17.3,   0,18]) rotate([0,0,90]) mcutab(12);
+        translate([-66+17.3,-9.2,18]) rotate([0,0,-90]) mcutab(7);
+        translate([-66+17.3, 9.2,18]) rotate([0,0,-90]) mcutab(7);
+
+        translate([-66+10,-12.7-2/2,18-7/2]) cube([7,2,7],true);
+        translate([-66+10, 12.7+2/2,18-7/2]) cube([7,2,7],true);
+        translate([-66-10,-12.7-2/2,18-7/2]) cube([7,2,7],true);
+        translate([-66-10, 12.7+2/2,18-7/2]) cube([7,2,7],true);
     }
 }
 
-module mcutab() {
-    translate([-5,0,0]) rotate([0,90,0]) linear_extrude(height=10) polygon([
+module mcutab(w) {
+    translate([-w/2,0,0]) rotate([0,90,0]) linear_extrude(height=w) polygon([
         [0,0],[4.8,0],[5.4,-0.5],[7,0.5],[5.4,1.5],[0,1.5]
     ]);
 }
