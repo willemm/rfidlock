@@ -7,11 +7,11 @@
 --   end
 -- )
 
-b = 1
+b = 2
 
 red =   string.char(b*0,b*0,b*0, b*6,b*6,b*0, b*4,b*8,b*0, b*0,b*9,b*0, b*0,b*8,b*4, b*0,b*6,b*6)
-green = string.char(b*0,b*0,b*0, b*6,b*0,b*6, b*8,b*0,b*4, b*9,b*0,b*0, b*8,b*4,b*0, b*6,b*6,b*0)
-blue =  string.char(b*0,b*0,b*0, b*0,b*6,b*6, b*0,b*4,b*8, b*0,b*0,b*9, b*4,b*0,b*8, b*6,b*0,b*6)
+green = string.char(b*8,b*0,b*4, b*9,b*0,b*0, b*8,b*4,b*0, b*6,b*6,b*0, b*0,b*0,b*0, b*6,b*0,b*6)
+blue =  string.char(b*4,b*0,b*8, b*6,b*0,b*6, b*0,b*0,b*0, b*0,b*6,b*6, b*0,b*4,b*8, b*0,b*0,b*9)
 black = string.char(b*0,b*0,b*0, b*0,b*0,b*0, b*0,b*0,b*0, b*0,b*0,b*0, b*0,b*0,b*0, b*0,b*0,b*0) 
 red = red..red..red..red
 green = green..green..green..green

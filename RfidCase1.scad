@@ -8,20 +8,26 @@ ledsize=3;
 
 dimples=false;
 sidecovers=false;
+black=true;
 
 diamondcase();
 diamondbottom();
 translate([0,0,20]) hexfront();
+translate([0,0,20]) diffuser();
 translate([0,0,18]) covers();
 
 *mirror([0,0,1]) diamondcase();
 *diamondbottom();
 *mirror([0,0,1]) hexfront();
+*translate([0,0,-5.8]) diffuser();
 
 module diamondcase() {
     union() {
         difference() {
-            linear_extrude(height=20) diamond(diamondsize, 2);
+            union() {
+                linear_extrude(height=19.8) diamond(diamondsize, 2);
+                translate([0,0,19.8]) linear_extrude(height=0.2, scale=0.998) diamond(diamondsize, 2);
+            }
             translate([0,0,15]) linear_extrude(height=6) hexagon(hexagonsize-10);
             if (sidecovers) {
                 translate([0,0,-1]) linear_extrude(height=17) diamond(diamondsize-4, 1);
@@ -52,20 +58,24 @@ module diamondcase() {
 
             for (a=[0:60:300]) rotate([0,0,a]) casepinhole();
         }
-        rotate([0,0, 30]) bottomtablip(-20);
-        rotate([0,0,-30]) bottomtablip( 20);
-        rotate([0,0,150]) bottomtablip( 20);
-        rotate([0,0,210]) bottomtablip(-20);
+        rotate([0,0, 30]) bottomtablip(-55);
+        rotate([0,0,-30]) bottomtablip( 55);
+        rotate([0,0,150]) bottomtablip( 55);
+        rotate([0,0,210]) bottomtablip(-55);
+        rotate([0,0, 30]) bottomtablip(  5);
+        rotate([0,0,-30]) bottomtablip( -5);
+        rotate([0,0,150]) bottomtablip( -5);
+        rotate([0,0,210]) bottomtablip(  5);
   
         *#translate([-66,0,18-2.4]) cube([34.6,25.4,4.8], true);
         translate([-66-17.3,   0,18]) rotate([0,0,90]) mcutab(12);
         translate([-66+17.3,-9.2,18]) rotate([0,0,-90]) mcutab(7);
         translate([-66+17.3, 9.2,18]) rotate([0,0,-90]) mcutab(7);
 
-        translate([-66+10,-12.7-2/2,18-7/2]) cube([7,2,7],true);
-        translate([-66+10, 12.7+2/2,18-7/2]) cube([7,2,7],true);
-        translate([-66-10,-12.7-2/2,18-7/2]) cube([7,2,7],true);
-        translate([-66-10, 12.7+2/2,18-7/2]) cube([7,2,7],true);
+        translate([-66+10,-12.7-2/2,18-7/2+0.1]) cube([7,2,7],true);
+        translate([-66+10, 12.7+2/2,18-7/2+0.1]) cube([7,2,7],true);
+        translate([-66-10,-12.7-2/2,18-7/2+0.1]) cube([7,2,7],true);
+        translate([-66-10, 12.7+2/2,18-7/2+0.1]) cube([7,2,7],true);
     }
 }
 
@@ -80,10 +90,14 @@ module diamondbottom() {
         union() {
             linear_extrude(height=1.8) diamond(diamondsize-2-0.2, 1);
             translate([0,0,1.8]) linear_extrude(height=0.1,scale=0.998) diamond(diamondsize-2-0.2, 1);
-            rotate([0,0, 30]) bottomtab(-20);
-            rotate([0,0,-30]) bottomtab( 20);
-            rotate([0,0,150]) bottomtab( 20);
-            rotate([0,0,210]) bottomtab(-20);
+            rotate([0,0, 30]) bottomtab(-55);
+            rotate([0,0,-30]) bottomtab( 55);
+            rotate([0,0,150]) bottomtab( 55);
+            rotate([0,0,210]) bottomtab(-55);
+            rotate([0,0, 30]) bottomtab(  5);
+            rotate([0,0,-30]) bottomtab( -5);
+            rotate([0,0,150]) bottomtab( -5);
+            rotate([0,0,210]) bottomtab(  5);
         }
         translate([-diamondsize/2.5,0,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
         translate([ diamondsize/2.5,0,-0.5]) linear_extrude(height=3) diamond(diamondsize/4, 1);
@@ -117,13 +131,17 @@ module hexfront() {
             hexdia = hexagonsize*2/s3;
             hexcover(10, hexdia-15, hexdia, 1.5, 2);
 
-            translate([0,0,3.3]) rotate([0,0,360/48]) cylinder(2.5, 53.6/2, 53.6/2, $fn=24);
-            translate([0,0,5.8]) rotate([0,0,360/48]) cylinder(2.5, 68/2, 68/2, $fn=24);
-            translate([-5,-33,3.3]) rotate([0,90,0])
+            translate([0,0,3.3]) rotate([0,0,360/48]) cylinder(5, 53.6/2, 53.6/2, $fn=24);
+            if (black) {
+                translate([0,0,7.3]) rotate([0,0,360/48]) cylinder(1, 68/2, 68/2, $fn=24);
+            } else {
+                translate([0,0,5.8]) rotate([0,0,360/48]) cylinder(2.5, 68/2, 68/2, $fn=24);
+            }
+            rotate([0,0,360/48]) translate([-5,-33,3.3]) rotate([0,90,0])
                 linear_extrude(height=10) polygon([
                     [-5,-3],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
                 ]);
-            translate([5,33,3.3]) rotate([0,90,180])
+            rotate([0,0,360/48]) translate([5,33,3.3]) rotate([0,90,180])
                 linear_extrude(height=10) polygon([
                     [-5,-3],[-5,-1],[-1,-1],[0.5,0.5],[2,-0.5],[-0.5,-3]
                 ]);
@@ -134,16 +152,50 @@ module hexfront() {
 
             for (a=[0:60:300]) rotate([0,0,a]) casepin();
         }
-        for (an = [360/lednum:360/lednum:360]) {
-            rotate([0,0,an]) {
-                translate([ledpos, 0, 6.7]) ledhole();
-                translate([ledpos, 0, 5.8]) cube([5.5,5.5,2],true);
+        if (black) {
+            for (an = [360/lednum:360/lednum:360]) {
+                rotate([0,0,an]) {
+                    translate([ledpos, 0, 6.7]) ledhole2();
+                }
+            }
+        } else {
+            for (an = [360/lednum:360/lednum:360]) {
+                rotate([0,0,an]) {
+                    translate([ledpos, 0, 6.7]) ledhole();
+                    translate([ledpos, 0, 5.8]) cube([5.5,5.5,2],true);
+                }
             }
         }
-        translate([0,0,2.7]) rotate([0,0,360/48]) cylinder(4.1, 53.6/2-2, 53.6/2-2, $fn=24);
+        translate([0,0,2.7]) rotate([0,0,360/48]) cylinder(5.6, 53.6/2-2, 53.6/2-2, $fn=24);
         translate([0,0,5.3]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
         translate([ 53.6/2-2,0,3.7]) cube([5,10,4.2],true);
         translate([-53.6/2+2,0,3.7]) cube([5,10,4.2],true);
+    }
+}
+
+module diffuser() {
+    if (black) {
+        union() {
+            difference() {
+                translate([0,0,5.8]) rotate([0,0,360/48]) cylinder(1.5, 68/2, 68/2, $fn=24);
+                translate([0,0,5.7]) rotate([0,0,360/48]) cylinder(1.7, 53.6/2+0.1, 53.6/2+0.1, $fn=24);
+                translate([0,0,5.3]) rotate([0,0,7.5]) cube([41.8,43.2,6],true);
+                
+                rotate([0,0,360/48]) translate([0,-35,4]) cube([10.2,5,10],true);
+                rotate([0,0,360/48]) translate([0,35,4]) cube([10.2,5,10],true);
+                for (an = [360/lednum:360/lednum:360]) {
+                    rotate([0,0,an]) {
+                        translate([ledpos, 0, 5.8]) cube([5.5,5.5,2],true);
+                        #translate([ledpos, 0, 5.8]) ledhole2(size=2.6, height=1.3);
+                    }
+                }
+            }
+            for (an = [360/lednum:360/lednum:360]) {
+                rotate([0,0,an]) {
+                    translate([ledpos, 0, 7.2]) ledhole2(size=2.8, height=0.5);
+                }
+            }
+        }
     }
 }
 
@@ -207,7 +259,7 @@ module bottomtab(off=0) {
     translate([-10+off,(diamondsize-4)/2-0.9,0])
         rotate([0,90,0])
             linear_extrude(height=20) polygon([
-                [0,-1.5],[0,0],[-9.2,0],[-10,0.8],[-12,-0.5],[-10.5,-1.5]
+                [0,-1.5],[0,0],[-8.2,0],[-9,0.8],[-11,-0.5],[-9.5,-1.5]
             ]);
 }
 
@@ -215,7 +267,7 @@ module bottomtablip(off=0) {
     translate([-10+off,(diamondsize-4)/2-0.8,0])
         rotate([0,90,0])
             linear_extrude(height=20) polygon([
-                [-7,1.3],[-9.2,0],[-10.5,1.3]
+                [-6,1.3],[-8.2,0],[-9.5,1.3]
             ]);
 }
 
@@ -227,6 +279,11 @@ function ntris(n,n1,n2,o,f) = concat(
     [for (i=[n1:n2-1]) [(i+f)%n+o,i+o+n,(i+1)%n+o+n]],
     [for (i=[n1:n2-1]) [(i+1)%n+o,i+o,(i+1-f)%n+o+n]]
     );
+
+
+module ledhole2(height=3.1, size=3) {
+    translate([0.2,0,0]) linear_extrude(height=height) polygon([[size,0],[0,size/s3],[-size,0],[0,-size/s3]]);
+}
 
 module ledhole(height=2.7, size=3, sides=48) {
     polyhedron(
