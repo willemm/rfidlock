@@ -1,12 +1,13 @@
-from machine import Pin,I2C
+import time,machine
 
 class PN532:
     def __init__(self):
-        self._i2c = I2C(scl=Pin(4),sda=Pin(0),freq=100000)
+        self._i2c = machine.I2C(scl=machine.Pin(4),sda=machine.Pin(0),freq=100000)
         self._state = 'configsam'
         self._timeout = 10
         self.firmware = None
         self.cardid = None
+        self.verbose = False
 
     def _reset(self):
         if self._timeout <= 10:
@@ -36,7 +37,8 @@ class PN532:
         res = self._readframe(0x02, 4)
         if res != None:
             self.firmware = "Firmware: IC:%02x Ver:%d.%d Supported:%02x" % (res[0],res[1],res[2],res[3])
-            print(self.firmware)
+            if self.verbose:
+                print(self.firmware)
             return 'idle',100
 
     def _idle(self):
@@ -51,7 +53,8 @@ class PN532:
         if res != None:
             if res[0] == 1:
                 self.cardid = (res[6]<<24)+(res[7]<<16)+(res[8]<<8)+res[9]
-                print("Got cardid 0x%08x" % self.cardid)
+                if self.verbose:
+                    print("Got cardid 0x%08x" % self.cardid)
             else:
                 self.cardid = None
             return 'idle',100
@@ -67,7 +70,8 @@ class PN532:
             chk -= c
         frame.append(chk%256)
         frame.append(0)
-        print("Send frame %s" % bytes(frame))
+        if self.verbose:
+            print("Send frame %s" % bytes(frame))
         if self._i2c.writeto(0x24, bytearray(frame)) < len(frame):
             print("Failed to send frame for 0x%02x" % cmd[0])
             return False
@@ -79,9 +83,11 @@ class PN532:
         return True
 
     def _readframe(self,cmd,count):
-        print("Read frame")
+        if self.verbose:
+            print("Read frame")
         result = self._i2c.readfrom(0x24, count+8)
-        print("Got frame %s" % result)
+        if self.verbose:
+            print("Got frame %s" % result)
         if len(result) >= 1 and result[0] == 0x01:
             if result[7]-1 != cmd:
                 print("Unexpected command answer (%02x <> %02x)" % (cmd,result[7]))
@@ -102,7 +108,8 @@ class PN532:
         'waitscancard':_waitscancard
     }
     def mainloop(self):
-        print("Step %s" % self._state)
+        if self.verbose:
+            print("Step %s" % self._state)
         newstate = self._states[self._state](self)
         self._timeout -= 1
         if newstate:
@@ -113,3 +120,12 @@ class PN532:
             self._state = 'reset'
             self._timeout = 100
 
+def test(msec):
+    pn = PN532()
+    cardid = None
+    for r in range(msec):
+        pn.mainloop()
+        if pn.cardid != cardid:
+            cardid = pn.cardid
+            if cardid:
+                print("Card: %08x" % cardid)
