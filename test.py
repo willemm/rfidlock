@@ -10,7 +10,11 @@ cardid = None
 colors = [(20,0,0),(15,15,0),(0,20,0),(0,15,15),(0,0,20),(15,0,15)]
 for r in range(6000):
     ct = ticks_add(ticks_ms(),10)
-    pn.mainloop()
+    try:
+        pn.mainloop()
+    except:
+        sleep_ms(100)
+        continue
     if pn.cardid != cardid:
         cardid = pn.cardid
         if cardid:
