@@ -84,10 +84,10 @@ module diamondcase() {
 }
 
 module batteryclips() {
-    translate([-33/2,-94/2,0]) batterypin();
-    translate([-33/2, 94/2,0]) batterypin();
-    translate([ 33/2,-94/2,0]) batterypin();
-    translate([ 33/2, 94/2,0]) batterypin();
+    translate([-33/2,-94.5/2,0]) batterypin();
+    translate([-33/2, 94.5/2,0]) batterypin();
+    translate([ 33/2,-94.5/2,0]) batterypin();
+    translate([ 33/2, 94.5/2,0]) batterypin();
     translate([-14,-50,0]) rotate([0,0,180]) batterytab(10);
     translate([-14, 50,0]) batterytab(10);
     translate([ 14,-50,0]) rotate([0,0,180]) batterytab(10);
@@ -95,8 +95,8 @@ module batteryclips() {
 }
 
 module batterypin() {
-    translate([0,0,-1.9]) cylinder(3.5,2.3,2.3, $fn=24);
-    translate([0,0,-3.5]) cylinder(1.6,1.2,1.2, $fn=24);
+    translate([0,0,-1.9]) cylinder(3.4,2.3,2.3, $fn=24);
+    translate([0,0,-3.5]) cylinder(1.7,1.2,1.2, $fn=24);
     translate([0,0,-4.0]) cylinder(0.5,0.8,1.2, $fn=24);
 }
 
@@ -195,8 +195,11 @@ module hexfront() {
                 ]);
 
             rotate([0,0, 30]) casetab();
+            rotate([0,0, 90]) casetab();
             rotate([0,0,150]) casetab();
+            rotate([0,0,210]) casetab();
             rotate([0,0,270]) casetab();
+            rotate([0,0,330]) casetab();
 
             for (a=[0:60:300]) rotate([0,0,a]) casepin();
         }
@@ -303,8 +306,8 @@ module casetabcut() {
 module casetab() {
     translate([-10,(hexagonsize-10)/2,-2])
         rotate([0,90,0])
-            linear_extrude(height=caseheight) polygon([
-                [-11,-1.5],[-9,0],[-0.5,0],[0.2,0.7],[1.5,-0.1],[0.1,-1.5]
+            linear_extrude(height=20) polygon([
+                [-11,-1.5],[-9,0],[-0.5,0],[0.3,0.8],[1.7,-0.2],[0.3,-1.5]
             ]);
 }
 
