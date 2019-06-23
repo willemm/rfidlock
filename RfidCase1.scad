@@ -1,6 +1,6 @@
 s3=sqrt(3);
 
-diamondsize=115;
+diamondsize=110;
 hexagonsize=100;
 lednum=24;
 ledpos=59.8/2;
@@ -78,8 +78,8 @@ module diamondcase() {
         translate([-66-10,-12.7-2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
         translate([-66-10, 12.7+2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
 
-        *#translate([0,0,caseheight-2-1.5]) batteryholder();
-        translate([0,0,caseheight-2-1.5]) batteryclips();
+        *#translate([0,0,caseheight-2-1.5]) rotate([0,0,30]) batteryholder();
+        translate([0,0,caseheight-2-1.5]) rotate([0,0,30]) batteryclips();
     }
 }
 
@@ -95,9 +95,11 @@ module batteryclips() {
 }
 
 module batterypin() {
-    translate([0,0,-1.9]) cylinder(3.4,2.3,2.3, $fn=24);
-    translate([0,0,-3.5]) cylinder(1.7,1.2,1.2, $fn=24);
-    translate([0,0,-4.0]) cylinder(0.5,0.8,1.2, $fn=24);
+    rotate([0,0,360/48]) {
+        translate([0,0,-1.9]) cylinder(3.4,2.25,2.25, $fn=24);
+        translate([0,0,-3.5]) cylinder(1.7,1.2,1.2, $fn=24);
+        translate([0,0,-4.0]) cylinder(0.5,0.8,1.2, $fn=24);
+    }
 }
 
 module batterytab(w) {
@@ -118,12 +120,12 @@ module batteryholder() {
                 [for (an=[180:10:270]) [-bh+sin(an)*cr,-bw+cos(an)*cr]],
                 [for (an=[270:10:360]) [-bh+sin(an)*cr, bw+cos(an)*cr]]
             ));
-            translate([-1,-6,-12]) cube([40,77,24], true);
+            translate([-1, 6,-12]) cube([40,77,24], true);
         }
-        translate([-33/2,-94/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
-        translate([-33/2, 94/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
-        translate([ 33/2,-94/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
-        translate([ 33/2, 94/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
+        translate([-33/2,-94.5/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
+        translate([-33/2, 94.5/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
+        translate([ 33/2,-94.5/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
+        translate([ 33/2, 94.5/2,-4.5]) cylinder(3,1.25,1.25, $fn=24);
     }
 }
 
