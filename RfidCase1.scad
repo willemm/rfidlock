@@ -84,14 +84,14 @@ module diamondcase() {
 }
 
 module batteryclips() {
-    translate([-33/2,-94.5/2,0]) batterypin();
-    translate([-33/2, 94.5/2,0]) batterypin();
-    translate([ 33/2,-94.5/2,0]) batterypin();
-    translate([ 33/2, 94.5/2,0]) batterypin();
-    translate([-14,-50,0]) rotate([0,0,180]) batterytab(10);
-    translate([-14, 50,0]) batterytab(10);
-    translate([ 14,-50,0]) rotate([0,0,180]) batterytab(10);
-    translate([ 14, 50,0]) batterytab(10);
+    translate([-33/2,-94.8/2,0]) batterypin();
+    translate([-33/2, 94.8/2,0]) batterypin();
+    translate([ 33/2,-94.8/2,0]) batterypin();
+    translate([ 33/2, 94.8/2,0]) batterypin();
+    translate([-14,-50.2,0]) rotate([0,0,180]) batterytab(10);
+    translate([-14, 50.2,0]) batterytab(10);
+    translate([ 14,-50.2,0]) rotate([0,0,180]) batterytab(10);
+    translate([ 14, 50.2,0]) batterytab(10);
 }
 
 module batterypin() {
