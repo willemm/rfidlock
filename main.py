@@ -2,6 +2,7 @@ from pn532 import PN532
 from machine import Pin
 from neopixel import NeoPixel
 from utime import sleep_ms,ticks_ms,ticks_add,ticks_diff,time
+import ntptime
 import wifiportal
 import urequests as requests
 
@@ -16,6 +17,8 @@ for r in range(8):
     sleep_ms(50)
 
 wifiportal.captive_portal("RfidLock")
+
+ntptime.settime()
 
 for r in range(8):
     np[r] = (0,0,0)
