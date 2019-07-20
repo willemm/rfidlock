@@ -1,8 +1,9 @@
 from pn532 import PN532
 from machine import Pin
 from neopixel import NeoPixel
-from utime import sleep_ms,ticks_ms,ticks_add,ticks_diff
+from utime import sleep_ms,ticks_ms,ticks_add,ticks_diff,time
 import wifiportal
+import urequests as requests
 
 np = NeoPixel(Pin(2),24)
 np.write()
@@ -45,6 +46,8 @@ while True:
                 cardstate = 224
             else:
                 cardstate = 324
+            res = requests.post("http://test.medicorum.space/roster/api/register_access.php", data=('{"cardid":"%08x","timestamp":%d}' % (cardid,time())), headers = {'Content-Type': 'application/json'})
+            print("POST: %s" % (res.text.strip()))
 
     if cardstate > 0 and cardstate < 400 and (cardstate % 100) <= 24:
         cardstate = cardstate-1
