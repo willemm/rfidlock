@@ -67,20 +67,23 @@ module diamondcase() {
         rotate([0,0,-30]) bottomtablip( -5);
         rotate([0,0,150]) bottomtablip( -5);
         rotate([0,0,210]) bottomtablip(  5);
-  
-        *#translate([-66,0,caseheight-2-2.4]) cube([34.6,25.4,4.8], true);
-        translate([-66-17.3,   0,caseheight-2]) rotate([0,0,90]) mcutab(12);
-        translate([-66+17.3,-9.2,caseheight-2]) rotate([0,0,-90]) mcutab(7);
-        translate([-66+17.3, 9.2,caseheight-2]) rotate([0,0,-90]) mcutab(7);
-
-        translate([-66+10,-12.7-2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
-        translate([-66+10, 12.7+2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
-        translate([-66-10,-12.7-2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
-        translate([-66-10, 12.7+2/2,caseheight-2-7/2+0.1]) cube([7,2,7],true);
+        translate([-66, 0, caseheight-2]) wemosd1();
 
         *#translate([0,0,caseheight-2-1.5]) rotate([0,0,30]) batteryholder();
         translate([0,0,caseheight-2-1.5]) rotate([0,0,30]) batteryclips();
     }
+}
+
+module wemosd1() {
+    *#translate([0,0,-2.4]) cube([34.6,25.4,4.8], true);
+    translate([-17.3,   0,0]) rotate([0,0,90]) mcutab(12);
+    translate([ 17.3,-9.2,0]) rotate([0,0,-90]) mcutab(7);
+    translate([ 17.3, 9.2,0]) rotate([0,0,-90]) mcutab(7);
+
+    translate([ 10,-12.7-2/2,-7/2+0.1]) cube([7,2,7],true);
+    translate([ 10, 12.7+2/2,-7/2+0.1]) cube([7,2,7],true);
+    translate([-10,-12.7-2/2,-7/2+0.1]) cube([7,2,7],true);
+    translate([-10, 12.7+2/2,-7/2+0.1]) cube([7,2,7],true);
 }
 
 module batteryclips() {
